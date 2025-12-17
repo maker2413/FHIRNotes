@@ -1,0 +1,33 @@
+#+TITLE: HL7 FHIR Notes
+
+These are just some notes I took while working through this [[https://www.udemy.com/course/hl7-fhir-mastery-a-course-for-newbies-and-pros/][Udemy Course]].
+
+This course is primarily designed for software developers, software testers,
+interface analysts, system integrators, and anyone interested in exploring the
+HL7 FHIR standard and it's documentation. It is important to note that FHIR is a
+broad and evolving topic so no single course can cover it all.
+
+* Course Objectives
+  This course aims to be a:
+  - Introduction to HL7 and some relevant standards, in order to provide a
+    contextual background leading up to the development of HL7 FHIR.
+  - Introduction to the FHIR standard, delving into its historical context,
+    design principles, development framework, and the specification itself.
+  - Introduction to customization of the FHIR standard for practical usage in
+    real-world scenarios.
+
+* Course Overview
+  This course is divided into three main parts:
+  1. [[./HealthcareStandards/README.org][Healthcare standards]]:
+     - HL7 version 2
+     - HL7 version 3 and RIM
+     - Clinical Document Architecture (CDA or CCDA)
+     - OpenEHR
+  2. FHIR standard
+     - What is HL7 FHIR
+     - FHIR Specification
+     - FHIR Resources
+     - Mastering FHIR Search
+     - Terminologies
+  3. Conclusion
+     - Next Steps
