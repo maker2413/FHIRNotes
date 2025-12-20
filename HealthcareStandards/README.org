@@ -1,4 +1,98 @@
 #+TITLE: Understanding Interoperability, HL7, and Related Standards
 
 Before diving right into HL7 it will help to go over some of the history and
-learn how we got to where we are today.
+learn how we got to where we are today. In the 1970s the idea of integrated
+Health Information Systems was born. Initially, these systems focused on the
+financial and administrative aspects of healthcare. Eventually there was a shift
+in focus - a shift towards patient-centered care. The goal was to integrate the
+vast amount of information scattered across numerous healthcare records into one
+cohesive system. However, early attempts faced a major roadblock - the
+technology of the time was not advanced enough.
+
+Fast forward to today, and the landscape has dramatically changed. The
+transformation has been fueled by the concept of
+interoperability. Interoperability means different things, but the most widely
+used definition is "The ability of two or more systems or components to
+interchange information and predictably use the information that has been
+exchanged." In the context of healthcare this seamless flow is vital.
+
+Throughout your healthcare journey you might visit different specialists, get
+treatment at various healthcare facilities, and your records could be with
+different healthcare providers and payers.
+
+The benefits of interoperability improve:
+- Efficiency
+- Quality
+- Safety
+
+With interoperability systems, the attending physicians can access the patient's
+medical history, allergies, medications, and previous diagnoses promptly. This
+instant access to comprehensive information can be life-saving, especially in
+critical situations.
+
+The world of healthcare has different levels of interoperability:
+- Foundational (Technical): Making sure different healthcare systems or apps can
+  talk to each other securely, using the same communication channels and network
+  protocols.
+- Structural (Syntactic): Defines the format, syntax, and organization of data
+  sharing.
+- Semantic: Using specific medical terms, known as concepts, to make sure
+  information is easily shared across different systems. For instance there are
+  languages like:
+  - SNOMED CT: contains more than 360,000 medical terms acting like a universal
+    translator for medical data.
+  - LOINC: more than 100,000 terms for lab results.
+  - ICD: more than 120,000 codable terms for diagnoses.
+- Organizational: This involves aligning business rules, policies, legal
+  frameworks, workflows, and institutional practices.
+
+When it comes to reaching the various levels of interoperability Healthcare
+Standards step in to make it happen. There are five essential categories of
+standards:
+- Transport: Deals with how data is physically moved from one place to another.
+- Privacy and Security: Set the rules and protocols for safeguarding patient
+  information.
+- Content: Define the structure and format of data being exchanged.
+- Identifier: Unique serial numbers for different elements in the healthcare
+  system whether it's patients, healthcare providers, or specific medical
+  devices.
+- Vocabulary/Terminology: Agreed-upon dictionary of medical terms.
+
+* HL7v2 Messaging Standard
+  In the world of healthcare, there are lots of rules or standards that
+  different processes have to follow. These standards can vary depending on
+  region and purpose. One of the important standards is called HL7
+  version 2. This standard has been around for more than 35 years and still
+  plays a major role in healthcare.
+
+  To really understand what makes HL7v2 special let's take a trip back to 1987,
+  when the first version of the HL7 standard was developed. It's original
+  purpose to support the exchange of patient admission, discharge, and transfer
+  information. This led to the creation of ADT message types. Then in 1988 the
+  initial version of the HL7v2 was officially released, incorporating orders and
+  reports.
+
+  The most recent version available on the HL7 website is version 2.9. And
+  here's an interesting point: HL7v2 didn't appear out of thin air it was
+  influenced by standards used in adjacent industries. In fact, it shares
+  similarities with the ANSI X12 standard.
+
+  This course will not go over the HL7v2 syntax in full detail, but instead we
+  will go over a brief overview of its development methodology, which eventually
+  set the stage for the FHIR standard.
+
+  The HL7v2 development approach is centered around the Message Framework, a set
+  of guidelines that define how v2 messages are structured and populated. The
+  heart of the message framework is:
+  - Message Types: HL7v2 defines approximately 115 distinct message types. Each
+    message type follows a hierarchical format, built from required or optional
+    segments and segment groups.
+  - Segments: A logical grouping of data fields related to a specific
+    function. For example, the PID or Patient Identification segment contains
+    key patient information, such as permanent identifiers and demographic
+    details. HL7v2 includes around 180 segments, which are assembled depending
+    on the message type structure.
+  - Fields: Contain a specific set of data elements and uses a defined data
+    type. Fields can behave in ways that are sometimes confusing, for example a
+    field can be populated, not populated, or set to null. A field can also be
+    required, optional, or "Required But Empty".
