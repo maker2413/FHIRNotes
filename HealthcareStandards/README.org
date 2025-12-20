@@ -96,3 +96,70 @@ standards:
     type. Fields can behave in ways that are sometimes confusing, for example a
     field can be populated, not populated, or set to null. A field can also be
     required, optional, or "Required But Empty".
+
+  Let's briefly go over the HL7v2 Development Framework, which is related to the
+  message structure development:
+  - Backward Compatibility: The central principle of the development
+    framework.
+  - Accommodating Changes: This means, among other rules, that
+    - New message types can be introduced
+    - New segments can be added to existing message types
+    - New data types can be introduced
+    - Existing segments can be expanded by adding new fields at the end
+    - Existing data types can have new components appended at the end.
+  - Local Extensions: With the complexity of the medical world a
+    "one-size-fits-all" message doesn't always work:
+    - Custom message types
+    - Custom segements (Z segments)
+    - Custom data types
+
+  Manually building HL7v2 messages - especially counting pipes - is tedious and
+  error-prone. To streamline this, specialized v2 tools were created:
+  - Editors: supports viewing, editing, and sending HL7v2 messages using the
+    MLLP, or the Minimal Lower Layer Protocol. MLLP provides a simple framework
+    mechanism for reliably sending v2 messages over a TCP/IP connection.
+  - Specification Authoring: Not many tools were developed to help implementers
+    automate HL7v2 specification development.
+
+  Due to how configurable the HL7v2 message structure is this led to the rise of
+  the joke: "Once you have seen one HL7v2 message structure you have only seen
+  that one HL7v2 message structure". To address these challenges, HL7
+  International began developing version 3 of the HL7 standard.
+
+* HL7v3 Messaging structure
+  While HL7v2 was a major breakthrough in making healthcare communication more
+  standardized, over time it became clear a that a more structured approach was
+  needed. By the late 1990s the HL7 organization recognized the need for a more
+  robust standard that could handle the evolving complexities of healthcare
+  systems. At the same time object-oriented programming was gaining widespread
+  adoption, thanks to languages like C++ and Java.
+
+  HL7v3 development began with a focus on creating a standardized framework for
+  healthcare data exchange, incorporating advanced concepts from object-oriented
+  programming and formal modeling techniques. The core of version 3 became of
+  the Reference Information Model, or RIM.
+
+  The RIM is a formal, abstract model that defines the structure and semantics
+  of HL7v3 messages. Put simply it uses the concept of "classes" to represent
+  core elements of healthcare data. There are four main classes:
+  - Entity
+  - Role
+    - Role Link: subclass and interconnected to Role
+  - Participation
+  - Act
+    - Act Relationship: subclass and interconnect to Act
+
+  The RIM model is intentionally abstract, designed to support a wide variety of
+  healthcare workflows. Feel free to take a moment to look over RIM:
+  [[./RIM.png]]
+
+  Let's take a look at how the message development process was structured in
+  v3. This is a general breakdown of the v3 refinement process:
+  - Refinement: Allows standard definitions to be customized or enhanced to
+    better align with the specific needs of a given healthcare setting.
+  - Constraint: Gradually narrow the scope of a specification by building
+    additional models based on existing ones.
+
+  But how are version 3 message types actually built? It all starts with
+  refining and constraining the RIM into what's called a Domain Message
+  Information Model, or D-MIM.
