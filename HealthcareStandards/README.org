@@ -160,6 +160,198 @@ standards:
   - Constraint: Gradually narrow the scope of a specification by building
     additional models based on existing ones.
 
-  But how are version 3 message types actually built? It all starts with
-  refining and constraining the RIM into what's called a Domain Message
-  Information Model, or D-MIM.
+** HL7v3 Message building
+   But how are version 3 message types actually built? It all starts with
+   refining and constraining the RIM into what's called a Domain Message
+   Information Model, or D-MIM.
+
+   The D-MIM defines the specific classes, attributes, and relationships required
+   for a particular healthcare domain. There are about 25 such domains, covering
+   a wide range of areas - including clinical observations, immunizations,
+   medications, claims, and more.
+
+   Next to build messages containing actual clinical data for a given domain,
+   the D-MIM undergoes further refinement into one or more Refined Message
+   Information Models, or R-MIMs.
+
+   Finally the same process applies additional constraints to produce
+   Hierarchical Message Descriptions, or HMDs, and, ultimately, the actual
+   version 3 message type specifications.
+
+** XML Implementation
+   What we have just covered is primarily intended for standards developers and
+   are not used by the software developers who actually build the systems. To
+   bridge the gap, the version 3 standard includes the XML Implementation
+   Technology Specification, or XML ITS, which explains how HMDs are serialized
+   into XML Schemas and transmitted over the network.
+
+** Popularity
+   To address the shortcoming of version 2 of HL7 version3 was created with a
+   fully re imagined architecture centered on the RIM. While version 3
+   introduced rich clinical semantics, handled complex healthcare topics well,
+   and included a full set of application authoring tools, it ultimately saw
+   limited adoption despite significant efforts from healthcare IT
+   professionals.
+
+   One major issue was that the v3 models and messages turned out to be more
+   complex than anticipated. To make matters more difficult, the localization
+   process added another layer of complexity, often requiring developers to
+   piece together information from multiple sources just to interpret a message.
+
+   Version 3 still had a lasting impact - many of its design principles helped
+   shape the FHIR standard. And while much of v3 wasn't widely adopted, one part
+   of it has become extremely successful.
+
+* CDA
+  Even though HL7 version 3 RIM was designed to be clinically rich, it hasn't
+  seen widespread adoption in real-world healthcare settings. Despite extensive
+  effort from healthcare professionals, its complexity exceeded expectations,
+  limiting its practical uptake. However, one domain of version 3 gained
+  significant popularity - Clinical Document Architecture or CDA.
+
+  Unlike other domains of v3, CDA focused on organizing medical documents in a
+  structured, standardized way, which made sharing crucial patient information 
+  easier. It's worth noting that CDA is often confused with the Continuity of Care
+  Document or CCD.
+
+** What exactly is CDA?
+   The Clinical Document Architecture is a document markup standard that
+   specifies the structure and semantics of "clinical documents" for the purpose
+   of exchange. In other words, CDA provides guidance on how clinical reports
+   should be formatted and interpreted to enable consistent information exchange
+   between systems.
+
+   What sets CDA apart from the messages is that clinical documents must meet
+   the following characteristics:
+   - Persistence: A clinical document remains unchanged for a specific period,
+     as determined by local and regulatory rules.
+   - Stewardship: An organization responsible for it takes care of a clinical
+     document.
+   - Potential for authentication: A clinical document is a set of period
+     related information intended to be officially verified and approved.
+   - Context: A clinical document sets the initial context for what's inside it.
+   - Wholeness: Authentication of a clinical document covers the entire document
+     and doesn't apply to specific parts without considering the whole context.
+   - Human readability: A clinical document should be easily readable and
+     understandable for users.
+
+   Unlike the HL7v3 process of refinement and constraint the CDA process skips
+   the refinement steps from the RIM to the D-MIM and goes straight to the
+   R-MIM. Here is an image that shows what the CDA R-MIM looks like. Feel free
+   to look over this image to get a general idea of the CDA R-MIM:
+   [[./CDA_R-MIM.gif]]
+
+   There are two main components to the CDA R-MIM:
+   - The header (left half of image): Establishes the context for the entire
+     document. It is responsible for identifying and classifying the document,
+     and for providing key details such as patient, provider, encounter, and
+     authentication information.
+   - The body (right half of image): Contains the clinical context, divided into
+     sections, each potentially with narrative blocks, structured entries, or
+     external references.
+
+   After this the CDA Hierarchical Description (CDA HD) is generated from the
+   R-MIM. The HD contains conformance rules and serves as the foundation for
+   generating XML schemas via XML ITS. The resulting CDA XML schemas are
+   normative, meaning that every CDA document must pass XML schema validation to
+   be considered valid.
+
+   Even though the CDA R-MIM is relatively limited in scope, it remains highly
+   expressive and flexible - sometimes too much so. To make it more practical
+   for clinical use additional constraints are applied at three levels:
+   1. CDA Level 1: The most basic form of CDA. It includes only the document
+      header, which provides general information about the clinical
+      document. The body is unstructured and typically contains human-readable
+      content in proprietary formats like PDF.
+   2. CDA Level 2: This level introduces section-level templates. These
+      templates organize the content in a more structured format, similar to
+      HTML, and allow sections to be labeled using coded terminology.
+   3. CDA Level 3: At the third level, CDA includes entry-level templates that
+      add machine-readable data elements to the sections. This makes the
+      document not only understandable to humans but also processable by
+      computers, enabling true semantic interoperability.
+
+** Consolidated CDA
+   Consolidated CDA, or C-CDA. In the early 2000s, several Standards Development
+   Organizations - including HL7, ASTM, IHE, the US ONC, and others - were
+   working on overlapping clinical document standards. To streamline clinical
+   document exchange, they joined forces in a harmonization effort that led to
+   the creation of the Consolidated Clinical Document Architecture, also known
+   as C-CDA.
+
+   C-CDA is a collection of standardized document, section, and entry-level
+   templates. Initially driven by the US ONC, it was tailored to meet the needs
+   of the US healthcare system. C-CDA has undergone multiple updates and
+   enhancements to address technical challenges and improve interoperability,
+   with input from providers, EHR vendors, and SDOs.
+
+   The current version, C-CDA 4.0, includes approximately a dozen document
+   templates - among them the widely used Continuity of Care Document or CCD.
+
+** C-CDA Sepcification
+   At its core, C-CDA is a set of standardized templates at the document,
+   section, and entry levels. You might be wondering - what exactly does the
+   term "template" mean in this context? As mentioned earlier, CDA supports
+   three conformance levels, and the C-CDA specification addresses all three:
+   - Document templates: Places constraints on specific fields within the CDA
+     header and define how the document's sections should be organized. The
+     C-CDA specification includes approximately a dozen document-level
+     templates - one of the most widely recognized being the CCD.
+   - Section templates: Defines the content structure of each CDA section and
+     specify how entries are organized within those sections. The C-CDA
+     specification includes around 70 section-level templates, many of which are
+     reusable across multiple document-level templates.
+   - Entry templates: The C-CDA specification goes beyond section-level
+     templates with over a hundred entry-level templates. Examples include
+     templates for Age, Observation, Diagnosis, Immunization, and many others.
+
+   Alright, now, you might be thinking "This C-CDA spec is over 900 pages long -
+   what's the point?" Well, C-CDA documents are now widely adopted across more
+   than 40 HL7 Affiliate countries, including the US, UK, Canada, Germany,
+   France, Austria, Greece, Russia, Argentina, Japan, and others. This
+   widespread adoption didn't happen by chance. It was largely due to multiple
+   SDOs choosing to collaborate rather than compete. By working together to
+   create a unified specification, they reduced confusion and made it much
+   easier for healthcare providers and IT systems to implement and adopt C-CDA.
+
+   CDA was a major success and became the foundation for the C-CDA
+   specification. HL7 and other Standards Development Organizations took the
+   feedback seriously - addressing concerns about v3's complexity and the
+   challenges of the balloting process.
+
+* OpenEHR
+  When discussing the standards that shaped HL7 FHIR, it's essential to include
+  openEHR. While these two standards have influenced each other, they were
+  created for fundamentally different purposes.
+
+  The primary goal of HL7 standards, and FHIR in particular, is to enable the
+  sharing of clinical information. By contrast, openEHR focuses on how clinical
+  data is modeled and stored, with particular attention to persistence and
+  structure. That said, both standards can support either function, and there
+  are real-world implementations that reflect this overlap. However, despite
+  their different emphases, openEHR and FHIR share many common principles and
+  objectives. In fact, they are often seen as complementary - making healthcare
+  data exchange and interoperability better.
+
+  So what exactly is openEHR? It's not just a set of specifications. Instead,
+  it's a comprehensive modular architecture that provides core building blocks
+  for creating health information systems. The design is vendor-neutral and
+  technology-agnostic, making it adaptable, maintainable, and interoperable. It
+  focuses on having standardized and computer-friendly data definitions, and
+  it's shaped by experts in the healthcare field.
+
+  The key concept in openEHR is its two-level modeling approach, also known as
+  the "dual model". At the heart of this approach is the separation of the
+  general structure of health data from the clinical knowledge it
+  represents. These are divided into two distinct layers:
+  - Reference Model: Defines the basic objects and data types, and how they
+    relate to each other, independent of any clinical meeting. By keeping
+    clinical concepts separate, this model gives software architects the
+    flexibility to design systems without embedding domain-specific knowledge
+    into the technical structure.
+  - Archetype Model: Defines clinical concepts in a structured and standardized
+    way using archetypes and templates. It allows clinical content to be
+    described precisely, enabling systems to represent and manage clinical
+    knowledge effectively.
+
+  Let's now explore each level in more detail.
