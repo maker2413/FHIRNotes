@@ -1,0 +1,95 @@
+#+TITLE: The HL7 Fast Healthcare Interoperability Resources standard
+
+Now that we've wrapped up Part I, you should have a solid understanding of the
+long journey the HL7 community took to arrive at the idea of modernizing
+healthcare data exchange. We're now ready to dive into the core of this course -
+the Fast Healthcare Interoperability Resources, or FHIR, standard.
+
+To begin with let's go over what HL7 FHIR originally meant. Due to the fact that
+HL7v2 had become outdated and HL7v3 had grown too complex to gain widespread
+adoption, HL7 International - a nonprofit organization that develop healthcare
+data standards - introduced a new specification called Fast Healthcare
+Interoperability Resources, or FHIR.
+
+FHIR is a modern, flexible approach to sharing healthcare data, built on widely
+used web technologies such as JSON and RESTful APIs. It enables seamless access
+to and integration of healthcare information across different systems and
+applications. As a result, FHIR has been increasingly adopted by healthcare
+organizations and technology vendors around the world.
+
+Now, let's take a look back at how FHIR came to be. First, let's dive into the
+concept of Resources for Health. Back in the early 2010s, the people developing
+healthcare data standards were feeling the pressure to modernize. The Health IT
+community was eager to move beyond the legacy HL7 version 2 standard and adopt
+technologies that supported cloud computing, mobile applications, and modern web
+integration. At the same time, broader tech innovations were influencing
+expectations - take Facebook, for example. Developers could build apps that
+seamlessly integrated with Facebook's platform using a simple, JSON-based API.
+
+Inspired by these trends, a new initiative called Resources for Health, or RFH,
+emerged around 2010 to explore a modern, web-friendly approach to healthcare
+interoperability. Resources for Health was the brainchild of Grahame Grieve,
+Ewout Kramer, and Lloyd McKenzie. Their goal was to explore what a modern HL7
+specification might look like if they started from scratch - focusing on web
+technologies and RESTful design principles. They introduced the concept of a
+"resource", which refers to a small, self-contained piece of medical
+information.
+
+Let's briefly dive into how FHIR's modeling approach differs from earlier HL7
+standards. Unlike HL7 version 2, which organizes information into reusable
+message segments tailored for specific workflows, FHIR introduces a set of
+modular healthcare "resources". These resources are designed to represent common
+clinical and administrative concepts, and can be combined in flexible ways to
+meet a wide range of use cases.
+
+This resource-based approach gives a lot of flexibility and makes it easier for
+different systems to communicate effectively. Take a look at this table for a
+high-level comparison of these modeling approaches:
+| HL7v2                | FHIR                         |
+|----------------------+------------------------------|
+| Segments             | Resource Types               |
+| Model by combination | Model by composition         |
+| Trigger event based  | REST, subscription, Document |
+| Extensible           | Extensible                   |
+| MLLP                 | RESTful API                  |
+| ER7                  | JSON, XML, RDF               |
+
+Respectively, unlike HL7 version 3, which followed a "model by constraint"
+methodology, FHIR takes a compositional approach. In FHIR, use cases are
+typically addressed by linking multiple resources together through
+references. While a single resource might be sufficient for a simple scenario,
+more commonly, resources are combined and tailored to meet specific clinical or
+business requirements.
+
+* What is FHIR really about?
+  Well, at its core, FHIR is a set of specifications that define how healthcare
+  applications exchange information.
+
+  It outlines what data is shared, how it's shared, and how it should be
+  managed. FHIR supports multiple approaches - known as exchange paradigms - for
+  sharing data between systems, with a strong emphasis on using modern web
+  technologies like RESTful APIs. One of the great strengths of FHIR is that
+  it's designed to be implementer-friendly - simple to understand and
+  straightforward to use. The entire FHIR specification is freely available
+  online, making it highly accessible. That's a big contrast compared to
+  standards like X12, which can be harder to obtain and work with.
+
+  After more than a decade of discussion and development, the FHIR standard has
+  come a long way. What began as a simple one-page website with fewer than 50
+  sections and just 9 established, plus 22 proposed, resource types has grown
+  into a comprehensive platform with nearly 3500 pages and around 140
+  well-defined resources.
+
+* FHIR Specification
+  To reference documentation on the FHIR specification simply review
+  [[fhir.org]]. When reviewing documentation on the FHIR specification note that any
+  page marked as ~N~ stands for "Normative", which simply means that that
+  section is considered stable and is unlikely to change. Any page marked ~TU~
+  stands for "Trial Use", which indicates that the item is still under review.
+
+* FHIR Resources
+  If you've explored different FHIR resource types, you've probably noticed they
+  share a common structure. This typically includes a unique identifier,
+  metadata stored by the system, and other elements. FHIR actually uses an
+  inheritance model - somewhat similar to what we discussed earlier with HL7
+  version 3 and the RIM.

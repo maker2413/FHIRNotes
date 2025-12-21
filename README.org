@@ -23,7 +23,7 @@ broad and evolving topic so no single course can cover it all.
      - HL7 version 3 and RIM
      - Clinical Document Architecture (CDA or CCDA)
      - OpenEHR
-  2. FHIR standard
+  2. [[./FHIRStandard/README.org][FHIR standard]]
      - What is HL7 FHIR
      - FHIR Specification
      - FHIR Resources
