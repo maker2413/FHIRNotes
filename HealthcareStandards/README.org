@@ -355,3 +355,50 @@ standards:
     knowledge effectively.
 
   Let's now explore each level in more detail.
+
+** OpenEHR Reference Model
+   The openEHR Reference Model is intentionally kept simple and stable, serving
+   as the foundational backbone for openEHR-based systems. It defines a set of
+   basic classes and data types that must be supported by any
+   implementation. While it doesn't include clinical content - such as
+   medications or diagnoses - it provides the structural basis for openEHR's
+   multi-level architecture. Clinical meaning is instead defined separately
+   using archetypes, allowing domain experts to manage clinical models
+   independently of the underlying data structures.
+
+   This separation addresses a common problem in single-model systems, where
+   clinical knowledge is embedded directly into database designs, often leading
+   to interoperability challenges. By contrast, the Reference Model supports
+   syntactic interoperability - the ability of systems to exchange data in a
+   consistent structure - regardless of which archetypes are used.
+
+** OpenEHR Archetype Model
+   In the world of openEHR, archetypes are at the core of the system. They
+   provide a standardized way to define and represent clinical concepts within
+   electronic health records.
+
+   One of the key advantages of archetypes is that they enable medical experts
+   to define clinical content without needing programming skills. This means
+   subject matter experts can specify medical concepts and set rules using the
+   Archetype Model Language, or ADL, to create specific clinical records.
+
+   Each archetype can represent a wide range of concepts, such as medications,
+   blood pressure, and much more. Archetypes can also be customized to meet
+   evolving needs, while preserving the foundational structure from their parent
+   archetype.
+
+   Every Archetype includes four main components:
+   - Description
+   - Definition
+   - Ontology bindings
+   - Revision history
+
+   Templates in openEHR are made up of multiple archetypes, each defining
+   specific pieces of clinical data and processes related to a particular
+   medical use case - such as entries in a patient's observation report.
+
+   Once a template is created, it can be compiled into an Operational Template,
+   or OPT. An OPT simplifies system implementation by consolidating all
+   referenced archetypes and applying any specializations. The result is a
+   self-contained structure that includes all the necessary archetype and
+   reference model components required for use at runtime.
