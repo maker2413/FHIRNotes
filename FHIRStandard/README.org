@@ -93,3 +93,85 @@ business requirements.
   metadata stored by the system, and other elements. FHIR actually uses an
   inheritance model - somewhat similar to what we discussed earlier with HL7
   version 3 and the RIM.
+
+** FHIR Resource Type Framework
+   At the core of every FHIR resource is the ~Base~ class, which doesn't contain
+   any specific elements or restrictions. From there, we have a class called
+   ~Resource~, which inherits from ~Base~ and introduces elements like a logical
+   ID, metadata, and a few others. Building on that, the ~DomainResource~ class
+   adds human-readable narrative support, allows for root-level extensions, and
+   supports contained resources.
+
+   Most commonly used FHIR resource types are built on ~DomainResource~ and are
+   grouped into modules like ~Administration~, ~Clinical~, ~Medications~ and
+   about 11 others.
+
+   Now, here's an exception worth noting - the resource types ~Bundle~,
+   ~Parameters~, and ~Binary~ inherit directly from ~Resource~, not
+   ~DomainResource~. These three resources do not support root-level extensions,
+   narratives, or contained resources. You can see this in the following image:
+   [[./TypeFramework.png]]
+
+   Let's jump into a quick Q&A session to go over some of the most common
+   questions you might have.
+   - Can a resource instance with an identifier element be used as a contained
+     resource?
+     - Yes, a resource with an identifier can be used as a contained resource,
+       as long as there's a reference between the parent resource and the
+       contained one. However, if the resource instance can be uniquely
+       identified - such as by using a business identifier - it's generally
+       better practice to represent it as a standalone resource.
+   - Can a contained resource reference back to the parent or container
+     resource?
+     - Absolutely. The FHIR specification explicitly allows bidirectional
+       references, meaning a contained resource can reference its parent
+       resource.
+   - Can a contained resource reference another contained resource within the
+     same parent resource?
+     - Yes, this is possible as well. Contained resources within the same parent
+       can reference each other, as long as at least one of them is also
+       referenced by, or references, the parent resource.
+   - Can a contained resource reference another resource instance outside the
+     parent or container resource?
+     - This is indeed possible, but in practice, it requires indexing contained
+       resource instances and may involve creating chained search parameters
+       specific to the FHIR server you're using. Once this is done, you should
+       be able to retrieve the parent container resource along with the
+       referenced resource.
+
+* FHIR Data Types
+  As we mentioned earlier, at the core of FHIR is the ~Base~ class, which
+  doesn't have any specific elements or restrictions. Unsurprisingly, this
+  ~Base~ class serves as the foundation for all data types in FHIR.
+
+  Moving specifically to data types, the next level is the ~Element~ class. This
+  class introduces two key attributes ~id~ and ~extension~. You might have
+  already guessed that any data type in FHIR can include extensions.
+
+  Following that, we have the ~DataType~ class, which acts as the base
+  definition for all data types. Its two main subclasses are ~PrimitiveType~ and
+  ~BackboneType~. The primary difference between them is that ~BackboneType~
+  includes the ~modifierExtension~ attribute.
+
+  FHIR data types come in two varieties: ~primitive~ and ~complex~. ~Primitive~
+  data types have a single simple property, while complex data types can contain
+  multiple properties - each of which may itself be a ~primitive~ or another
+  ~complex~ data type.
+
+  You can see all of this in the following image:
+  [[./DataTypes.png]]
+
+** FHIR Extensibility
+   Let's discuss an exciting and important topic the FHIR extensibility
+   mechanism. Even if you're new to healthcare IT, you've probably noticed that
+   no standard can fully cover every real-world data scenario or business
+   process. The HL7 working groups recognized this early on. In earlier versions
+   like HL7v2, the standard allowed local extensions of message types, trigger
+   events, segments, fields, and data types. This approach has continued through
+   HL7v3 and is now a core part of FHIR.
+
+   As you may recall, all resources and data types derive from the ~Base~
+   class. Both the ~DomainResource~ and ~Element~ classes include an extension
+   element, which allows extensions to be added at the root level of a resource
+   instance, as well as to individual elements, including those with ~primitive~
+   data types.
