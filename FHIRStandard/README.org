@@ -175,3 +175,179 @@ business requirements.
    element, which allows extensions to be added at the root level of a resource
    instance, as well as to individual elements, including those with ~primitive~
    data types.
+
+* FHIR Search Capabilities
+  Searching for FHIR resource instances is a fundamental part of the FHIR
+  standard, and it can be both exciting and a bit challenging. The challenge
+  lies in the flexibility of FHIR. It's designed to strike a balance between
+  being simple enough for everyday use, and adaptable enough to meet the demands
+  of real-world clinical and business scenarios.
+
+  Let's explore how data is exchanged. As you may recall, FHIR defines several
+  mechanisms, called paradigms, to manage data exchange. There are four main
+  ways to exchange data in FHIR:
+  - REST
+  - Documents
+  - Messages
+  - Services
+
+  Of these RESTful interfaces are the most widely used, and much of it is now
+  published as normative. It's important to note that FHIR servers can choose
+  which interactions and resource types they support. To communicate this
+  information, each FHIR server provides a CapabilityStatement - a special
+  resource that outlines what that server can do.
+
+  To request the CapabilityStatement, you can send a "capabilities" interaction
+  request:
+  #+begin_example
+    GET [base]/metadata
+  #+end_example
+
+  In this case, the term "metadata" refers to an operation, but unlike other
+  operations in FHIR, it doesn't use the dollar sign. Since FHIR servers can
+  vary, they may support different resource types, search parameters, or even
+  define custom search capabilities.
+
+  FHIR Search is one of the most important features of the entire FHIR
+  standard. It plays a crucial role in making it easy to find and retrieve
+  healthcare information from a FHIR server. This helps clinicians make informed
+  decisions, supports care coordination, and allows healthcare systems to run
+  their business operations more effectively.
+
+  Before we dive into details like modifiers, prefixes, or available search
+  parameters, let's start by understanding the types of search parameters. As
+  we discussed earlier, FHIR has primitive and complex data types. However, the
+  search parameter types used in FHIR's search mechanism don't align exactly
+  with those. They're designed to simplify implementation while maintaining
+  consistent behavior across both simple and complex data types.
+
+  Take a look at this table that shows how the search parameter types relate to
+  FHIR data types:
+  | Parameter Type | Primitive Data Type            | Complex Data Type                                 |
+  |----------------+--------------------------------+---------------------------------------------------|
+  | number         | integer, integer64, decimal    | ---                                               |
+  | date           | date, dateTime, instant        | Period, Timing                                    |
+  | string         | string                         | ---                                               |
+  | token          | code, boolean, id, uri, string | Coding, CodeableConcept, Identifier, ContactPoint |
+  | reference      | ---                            | Reference                                         |
+  | composite      | ---                            | ---                                               |
+  | quantity       | ---                            | Quantity                                          |
+  | uri            | uri                            | ---                                               |
+  | special        | ---                            | ---                                               |
+
+  You might be wondering, "What about complex types like Address or HumanName?"
+  Good question. In those cases, search parameters apply to the individual
+  components of the complex type - each of which is either a primitive or a
+  complex type already listed in the table.
+
+  Let's now talk about modifiers. You may have noticed that some search
+  parameters include a colon followed by another word. That part is called a
+  modifier. As the name suggests, it changes the default behavior of the search
+  parameter in a specific way. The available modifiers depend on the search
+  parameter type, and their use is completely optional. You should use them only
+  when needed to fine-tune the behavior of your query:
+  | Parameter Type | Modifier                                                                                       |
+  |----------------+------------------------------------------------------------------------------------------------|
+  | number         | :missing                                                                                       |
+  | date           | :missing                                                                                       |
+  | string         | :contains, :exact, :missing, :text                                                             |
+  | token          | :above, :below, :code-text, :in, :missing, :not, :not-in, :of-type, :text, :text-advanced      |
+  | reference      | :above, :below, :code-text, :in, :missing, :not-in, :text, :text-advanced, :identifier, [type] |
+  | composite      | ---                                                                                            |
+  | quantity       | :missing                                                                                       |
+  | uri            | :above, :below, :contains, :missing, :text                                                     |
+  | special        | ---                                                                                            |
+
+  Prefixes are another way to modify the behavior of ordered search
+  parameters. They can be used to adjust the behavior of ordered search
+  parameter types such as number, date and quantity. You can check the available
+  prefixes in the table here:
+  | Paramter Type | Prefixes                           |
+  |---------------+------------------------------------|
+  | number        | eq, ne, gt, lt, ge, le, sa, eb, ap |
+  | date          | eq, ne, gt, lt, ge, le, sa, eb, ap |
+  | string        | ---                                |
+  | token         | ---                                |
+  | reference     | ---                                |
+  | composite     | ---                                |
+  | quantity      | eq, ne, gt, lt, ge, le, sa, eb, ap |
+  | uri           | ---                                |
+  | special       | ---                                |
+
+  Now that we've covered search parameter types, modifiers, and prefixes, we can
+  combine them in a table that shows different patterns for how to use them
+  together:
+  | Parameter Type | Patterns                                                      |
+  |----------------+---------------------------------------------------------------|
+  | number         | [parameter]{:[modifier]}={[prefix]}[value]{,[value]}          |
+  | date           | [parameter]{:[modifier]}={[prefix]}[value]{,[value]}          |
+  | string         | [parameter]{:[modifier]}=[value]{,[value]}                    |
+  | token          | [parameter]{:[modifier]}={[system]} {[code]}                  |
+  | reference      | [parameter]{:[modifier]}={[type]/}[id]{/_history/[version]}   |
+  | composite      | [parameter]=[value]$[value]{$[value]}                         |
+  | quantity       | [parameter]{:[modifier]}={[prefix]}[number]{[system]}{[code]} |
+  | uri            | [parameter]{:[modifier]}=[value]{,[value]}                    |
+  | special        | [parameter]=[value]                                           |
+
+* Resource Validation
+  It's important to check resources against the FHIR standard and any associated
+  profiles during both the creation and processing of FHIR instances. Doing so
+  ensures interoperability, which we discussed in the earlier. It also helps
+  maintain data quality, supports better health information exchange, and
+  catches potential issues before they cause downstream problems.
+
+  When we talk about validation, we're looking at several key aspects that align
+  with different levels of interoperability:
+  1. Syntax Validation: This step checks whether the FHIR resource follows the
+     syntax rules defined by the specification. It involves verifying the
+     format - whether it's XML or JSON - and ensuring the structure is
+     well-formed and free of syntax errors.
+  2. Structure Validation: This means checking whether the resource instance
+     matches the expected structure defined in the FHIR standard or in a
+     specific implementation guide. We look to see if all required elements are
+     present, whether the correct data types are used, and whether constraints,
+     like cardinality, are respected.
+  3. Terminology Validation: FHIR resources often rely on standardized code
+     systems and value sets to express healthcare concepts. This type of
+     validation ensures that the codes used are valid, belong to the appropriate
+     code system, and are included in the allowed value sets.
+  4. Reference Validation: Checks whether those referenced resources actually
+     exist and are accessible.
+  5. Custom Validation: These are additional requirements specific to a
+     particular use case or implementation context, and help ensure the resource
+     is valid beyond the base specification. The FHIR specification outlines
+     many of these validation approaches in more detail.
+
+* FHIR Terminologies
+  In today's healthcare, coded information plays a crucial role in both
+  communication and data storage. In FHIR, we refer to this as
+  "terminologies". While most parts of the FHIR standard focus on structure,
+  FHIR terminology is all about ensuring semantic consistency.
+
+  FHIR terminology refers to standardized sets of codes, concepts, and
+  definitions. It allows us to represent clinical information in a structured,
+  meaningful way that systems can use together seamlessly.
+
+  In FHIR, terminology-related terms include:
+  | Coding concept | Description                                                                                                                                                                                                                      |
+  |----------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | Terminology    | Within the FHIR framework, the term "terminology" represents any collection of encoded information.                                                                                                                              |
+  | Concept Domain | A concept domain is simply a named set of concepts with no associated vocabulary or value set.                                                                                                                                   |
+  | Code System    | A code system is a set of standardized concepts or symbols with specific meanings. Most notable code systems are LOINC, SNOMED CT, ICD, etc.                                                                                     |
+  | Value Set      | A value set is a collection of codes from one or more coding systems or sub-domains representing a single concept for use in a particular context. Value sets may have subsets which are also considered as separate value sets. |
+
+** Bindings
+   Alright, let's talk about something that can make FHIR terminology a bit
+   tricky - the mechanism of binding, specifically binding strength. This
+   feature applies to all data types that involve coded elements, such as code,
+   Coding, and CodeableConcept.
+
+   You'll find binding strength described in all FHIR resource types, and it's
+   frequently referenced in implementation guides as well. Here is a table that
+   provides a simplified overview of binding strengths and how they apply to
+   data types with coded elements:
+   | Data Type        | Required                                                                      | Extensible                                                                     | Preferred                                                                                                    | Example                                                                     |
+   |------------------+-------------------------------------------------------------------------------+--------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------|
+   | code             | SHALL be selected from the specified value set                                | SHOULD be selected from the specified value set                                | SHALL NOT apply to an element with the 'code' data type                                                      | SHALL NOT apply to an element with the 'code' data type                     |
+   | Coding           | Coding.system and Coding.value SHALL be selected from the specified value set | Coding.system and Coding.value SHOULD be selected from the specified value set | Coding.system and Coding.value SHOULD be selected from the specified value set, but MAY use other value sets | Coding.system and Coding.value MAY be selected from the specified value set |
+   | Codeable Concept | At least one Coding SHALL be selected from the specified value set            | At least one Coding SHOULD be selected from the specified value set            | Coding SHOULD be selected from the specified value set, but MAY use other value sets                         | Coding MAY be selected from the specified value set                         |

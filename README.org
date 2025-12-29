@@ -29,5 +29,37 @@ broad and evolving topic so no single course can cover it all.
      - FHIR Resources
      - Mastering FHIR Search
      - Terminologies
-  3. Conclusion
-     - Next Steps
+
+* Conclusion
+  Unfortunately or fortunately, FHIR alone is not enough to build a fully
+  functional modern healthcare system. Here a few related standards and domains
+  that you might need to explore further, depending on your business or clinical
+  use cases:
+  - SMART on FHIR: SMART, which is short for Substitutable Medical Applications,
+    Reusable Technologies, is a framework that extends FHIR to support
+    healthcare applications. It enables developers to build secure healthcare
+    apps that work seamlessly across different EHR and EMR systems. A key
+    component of SMART on FHIR is secure access to healthcare data, which it
+    ensures through the OpenID Connect or OIDC identity management protocol.
+  - CDS Hooks: Short for Clinical Decision Support Hooks. CDS Hooks is a
+    standard that enables clinical decision support systems to integrate
+    directly with EHR and EMR systems. Its goal is to enhance clinical
+    decision-making by providing healthcare professionals with timely,
+    context-aware insights. These hooks trigger recommendations based on the
+    patient's current data and clinical guidelines.
+  - IHE: Integrating the Healthcare Enterprise, is an international initiative
+    aimed at improving the way healthcare systems exchange information. It
+    promotes the use of established standards to enable seamless data sharing
+    between systems and devices. Within the IHE framework, there are detailed
+    technical specifications called IHE Profiles, and it's important to note
+    these are different from FHIR profiles. IHE Profiles describe real-world
+    scenarios for data exchange and offer precise guidance on achieving
+    interoperability.
+  - OMOP: Observational Medical Outcomes Partnership, is a data standardization
+    initiative originally launched by the US Food and Drug Administration in
+    collaboration with pharma companies, research institutions, and
+    others. OMOP's main goal is to analyze large-scale, real-world healthcare
+    data from sources like EHRs, claims, and registries to support observational
+    research. While OMOP and FHIR serve different purposes, they are connected
+    through the concept of interoperability. OMOP provides a common data model
+    for healthcare data, while FHIR defines how that data is exchanged.
